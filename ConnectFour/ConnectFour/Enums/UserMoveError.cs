@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ConnectFour.Enums
 {
-    public enum Players
+    public enum UserMoveError
     {
-        Yellow,
-        Red,
-        Nobody
+        NoError,
+        ColumnNotExist,
+        ColumnFull,
     }
 }

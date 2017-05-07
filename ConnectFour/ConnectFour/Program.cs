@@ -7,20 +7,19 @@ namespace ConnectFour
     {
         static void Main(string[] args)
         {
-            TextParser parser = new TextParser();
-            TextPrinter printer = new TextPrinter();
+            UserInterface user = new UserInterface();
 
-            Tuple<int, int> dimensions = parser.PromptDimensions();
+            Tuple<int, int> dimensions = user.PromptDimensions();
             GameBoard gameBoard = new GameBoard(dimensions.Item1, dimensions.Item2);
-            printer.Print(gameBoard);
+            user.Print(gameBoard);
             MoveResult result = MoveResult.Invalid;
             Players whoseTurn = Players.Yellow;
 
             while (result != MoveResult.GameOver)
             {
-                int move = parser.GetMove(whoseTurn);
+                int move = user.GetMove(whoseTurn);
                 result = gameBoard.TryModifyBoard(move, whoseTurn);
-                printer.PrintResult(result, whoseTurn, gameBoard);
+                user.PrintResult(result, whoseTurn, gameBoard);
                 if (result == MoveResult.Valid)
                 {
                     whoseTurn = whoseTurn == Players.Yellow ? Players.Red : Players.Yellow;

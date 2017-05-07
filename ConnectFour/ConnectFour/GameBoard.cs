@@ -12,6 +12,7 @@ namespace ConnectFour
         private List<List<string>> columns = null;
         private int rows = 0;
         private int cols = 0;
+        public Players? Winner { get; private set; } = null;
 
         /// <summary>
         /// creates an empty gameboard of the specified dimensions
@@ -52,7 +53,12 @@ namespace ConnectFour
             int ind = columnToModify.IndexOf("o");
             columns[col][ind] = token;
 
-            return DetectGameEnd(col, ind) ? MoveResult.GameOver : MoveResult.Valid;
+            // set the winner
+            MoveResult retVal = DetectGameEnd(col, ind) ? MoveResult.GameOver : MoveResult.Valid;
+            if (retVal == MoveResult.GameOver && Winner != Players.Nobody)
+                Winner = whoseTurn;
+
+            return retVal;
         }
 
         /// <summary>
@@ -154,9 +160,6 @@ namespace ConnectFour
         }
 
         /// <summary>
-        /// The last witchhunter - Vin Diesel
-        /// Harmony quest
-        /// 
         /// Checks whether or not there are 4 consecutive tokens in this list
         /// </summary>
         private bool HasFourInARow(List<string> tokens, string token)
@@ -192,6 +195,7 @@ namespace ConnectFour
                 if (column[rows - 1] == "o")
                     return false;
             }
+            Winner = Players.Nobody;
             return true;
         }
 
