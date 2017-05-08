@@ -46,6 +46,7 @@
     <Compile Include="Enums\Players.cs" />
     <Compile Include="Exceptions\UserInputException.cs" />
     <Compile Include="GameBoard.cs" />
+    <Compile Include="LineCheck.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface.cs" />

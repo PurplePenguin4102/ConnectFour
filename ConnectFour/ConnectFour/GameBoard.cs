@@ -9,6 +9,7 @@ namespace ConnectFour
 {
     public class GameBoard
     {
+        private LineCheck line = new LineCheck();
         private List<List<string>> columns = null;
         private int rows = 0;
         private int cols = 0;
@@ -19,6 +20,9 @@ namespace ConnectFour
         /// </summary>
         public GameBoard(int rows, int cols)
         {
+            if (rows < 0 || cols < 0)
+                throw new ArgumentException(); // logical error, crash
+
             this.rows = rows;
             this.cols = cols;
             columns = new List<List<string>>();
@@ -67,136 +71,34 @@ namespace ConnectFour
         /// </summary>
         private bool DetectGameEnd(int col, int row)
         {
-            if (CheckVert(col, row) || CheckHoriz(col, row) || CheckDiag1(col, row) || CheckDiag2(col, row))
+            // set up line for use this iteration
+            line.Rows = rows;
+            line.Cols = cols;
+            line.Columns = columns;
+            line.Token = columns[col][row];
+
+            // grab all directions
+            var possibleWinDirections = new List<List<string>>
+            {
+                line.PickVert(col, row),
+                line.PickHoriz(col, row),
+                line.PickDiag1(col, row),
+                line.PickDiag2(col, row)
+            };
+
+            // test victory condition
+            if (possibleWinDirections.Any(tokens => line.HasFourInARow(tokens)))
             {
                 return true;
             }
 
-            return CheckDraw(rows);
-        }
-
-        /// <summary>
-        /// check the \ direction for 4 in a row
-        /// </summary>
-        private bool CheckDiag2(int col, int row)
-        {
-            string token = columns[col][row];
-            List<string> tokens = new List<string>();
-            for (int i = -3; i <= 3; i++)
+            // test for draw
+            if (line.CheckDraw())
             {
-                // bounds check
-                if (col + i < 0 || col + i >= cols || row - i < 0 || row - i >= rows)
-                    continue;
-
-                // gather tokens
-                tokens.Add(columns[col + i][row - i]);
-            }
-
-            // win condition
-            return HasFourInARow(tokens, token);
-        }
-
-        /// <summary>
-        /// check the / direction for 4 in a row
-        /// </summary>
-        private bool CheckDiag1(int col, int row)
-        {
-            string token = columns[col][row];
-            List<string> tokens = new List<string>();
-            for (int i = -3; i <= 3; i++)
-            {
-                // bounds check
-                if (col + i < 0 || col + i >= cols || row + i < 0 || row + i >= rows)
-                    continue;
-
-                // gather tokens
-                tokens.Add(columns[col + i][row + i]);
-            }
-
-            // win condition
-            return HasFourInARow(tokens, token);
-        }
-
-        /// <summary>
-        /// check the -- direction for 4 in a row
-        /// </summary>
-        private bool CheckHoriz(int col, int row)
-        {
-            string token = columns[col][row];
-            List<string> tokens = new List<string>();
-            for (int i = -3; i <= 3; i++)
-            {
-                // bounds check
-                if (col + i < 0 || col + i >= cols)
-                    continue;
-
-                // gather tokens
-                tokens.Add(columns[col + i][row]);
-            }
-
-            // win condition
-            return HasFourInARow(tokens, token);
-        }
-
-        /// <summary>
-        /// check the | direction for 4 in a row
-        /// </summary>
-        private bool CheckVert(int col, int row)
-        {
-            string token = columns[col][row];
-            List<string> tokens = new List<string>();
-            for (int i = -3; i <= 3; i++)
-            {
-                // bounds check
-                if (row + i < 0 || row + i >= rows)
-                    continue;
-
-                // gather tokens
-                tokens.Add(columns[col][row + i]);
-            }
-
-            // win condition
-            return HasFourInARow(tokens, token);
-        }
-
-        /// <summary>
-        /// Checks whether or not there are 4 consecutive tokens in this list
-        /// </summary>
-        private bool HasFourInARow(List<string> tokens, string token)
-        {
-            string LastSeen = tokens[0];
-            int count = 0;
-            foreach (var tok in tokens)
-            {
-                if (tok == LastSeen)
-                {
-                    count++;
-                    if (count == 4)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    LastSeen = tok;
-                    count = 1;
-                }
+                Winner = Players.Nobody;
+                return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// check if the board is full
-        /// </summary>
-        private bool CheckDraw(int rows)
-        {
-            foreach (var column in columns)
-            {
-                if (column[rows - 1] == "o")
-                    return false;
-            }
-            Winner = Players.Nobody;
-            return true;
         }
 
         /// <summary>
