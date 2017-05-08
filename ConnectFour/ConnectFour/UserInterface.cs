@@ -64,6 +64,10 @@ namespace ConnectFour
                     {
                         throw new UserInputException();
                     }
+                    else
+                    {
+                        move = usrIn[0];
+                    }
                 }
                 catch (UserInputException)
                 {
@@ -151,6 +155,7 @@ namespace ConnectFour
             switch (result)
             {
                 case MoveResult.GameOver:
+                    Print(gameBoard);
                     Console.WriteLine($"{gameBoard.Winner.ToString()} WINS !");
                     break;
                 case MoveResult.Invalid:

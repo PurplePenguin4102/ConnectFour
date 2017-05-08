@@ -25,6 +25,7 @@ namespace ConnectFour
                     whoseTurn = whoseTurn == Players.Yellow ? Players.Red : Players.Yellow;
                 }
             }
+            Console.ReadKey();
         }
     }
 }

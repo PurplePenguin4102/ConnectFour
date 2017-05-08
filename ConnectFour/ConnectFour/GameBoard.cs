@@ -45,7 +45,7 @@ namespace ConnectFour
             if (move > cols)
                 return MoveResult.Invalid;
             List<string> columnToModify = columns[col];
-            if (columnToModify.Any((ele) => ele == "o"))
+            if (!columnToModify.Any((ele) => ele == "o"))
                 return MoveResult.Invalid;
             #endregion
 
@@ -82,14 +82,14 @@ namespace ConnectFour
         {
             string token = columns[col][row];
             List<string> tokens = new List<string>();
-            for (int i = 3; i >= -3; i++)
+            for (int i = -3; i <= 3; i++)
             {
                 // bounds check
-                if (col - i < 0 || col - i >= cols || row + i < 0 || row + i > rows)
+                if (col + i < 0 || col + i >= cols || row - i < 0 || row - i >= rows)
                     continue;
 
                 // gather tokens
-                tokens.Add(columns[col - i][row + i]);
+                tokens.Add(columns[col + i][row - i]);
             }
 
             // win condition
@@ -103,14 +103,14 @@ namespace ConnectFour
         {
             string token = columns[col][row];
             List<string> tokens = new List<string>();
-            for (int i = 3; i >= -3; i++)
+            for (int i = -3; i <= 3; i++)
             {
                 // bounds check
-                if (col + i < 0 || col + i >= cols || row - i < 0 || row - i > rows)
+                if (col + i < 0 || col + i >= cols || row + i < 0 || row + i >= rows)
                     continue;
 
                 // gather tokens
-                tokens.Add(columns[col + i][row - i]);
+                tokens.Add(columns[col + i][row + i]);
             }
 
             // win condition
@@ -124,10 +124,10 @@ namespace ConnectFour
         {
             string token = columns[col][row];
             List<string> tokens = new List<string>();
-            for (int i = 3; i >= -3; i++)
+            for (int i = -3; i <= 3; i++)
             {
                 // bounds check
-                if (col - i < 0 || col - i >= cols)
+                if (col + i < 0 || col + i >= cols)
                     continue;
 
                 // gather tokens
@@ -145,10 +145,10 @@ namespace ConnectFour
         {
             string token = columns[col][row];
             List<string> tokens = new List<string>();
-            for (int i = 3; i >= -3; i++)
+            for (int i = -3; i <= 3; i++)
             {
                 // bounds check
-                if (row + i < 0 || row + i > rows)
+                if (row + i < 0 || row + i >= rows)
                     continue;
 
                 // gather tokens
@@ -179,7 +179,7 @@ namespace ConnectFour
                 else
                 {
                     LastSeen = tok;
-                    count = 0;
+                    count = 1;
                 }
             }
             return false;
