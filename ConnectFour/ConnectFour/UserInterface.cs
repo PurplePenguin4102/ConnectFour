@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ConnectFour.Enums;
 using ConnectFour.Exceptions;
+using ConnectFour.InputOutput;
 
 namespace ConnectFour
 {
@@ -15,6 +16,9 @@ namespace ConnectFour
         private string moveErrorMsg = $"> Please enter a single positive number within the board dimensions";
         private string goodbyeMsg = "See you next time!";
         private string boardRejectMsg = "> Please enter a single positive number within the board dimensions";
+        private Input input = new Input();
+        private Output output = new Output();
+        private Validator rules = new Validator();
 
         /// <summary>
         /// prompts the user for the gameboard dimensions. Return value should be the dimensions
@@ -29,7 +33,7 @@ namespace ConnectFour
                 try
                 {
                     int[] usrIn = Prompt(dimensionPromptMsg);
-                    if (ValidateDimensions(usrIn))
+                    if (rules.ValidateDimensions(usrIn))
                     {
                         // we now know usrIn contains 2 positive numbers
                         dimensions = new Tuple<int, int>(usrIn[0], usrIn[1]);
@@ -41,7 +45,7 @@ namespace ConnectFour
                 }
                 catch (UserInputException)
                 {
-                    Console.WriteLine(dimensionErrorMsg);
+                    output.Send(dimensionErrorMsg);
                 }
             }
             return dimensions;
@@ -60,21 +64,49 @@ namespace ConnectFour
                 try
                 {
                     int[] usrIn = Prompt(promptMsg);
-                    if (usrIn.Length != 1 || usrIn[0] <= 0)
+                    if (rules.ValidateMove(usrIn))
                     {
-                        throw new UserInputException();
+                        move = usrIn[0];
                     }
                     else
                     {
-                        move = usrIn[0];
+                        throw new UserInputException();
                     }
                 }
                 catch (UserInputException)
                 {
-                    Console.WriteLine(moveErrorMsg);
+                    output.Send(moveErrorMsg);
                 }
             }
             return move;
+        }
+
+        /// <summary>
+        /// Displays the current state of the game board to the user
+        /// </summary>
+        public string Print(GameBoard gameBoard)
+        {
+            return output.Send(gameBoard.ToString(), true);
+        }
+
+        /// <summary>
+        /// Displays the result of the player's turn, either printing the board or an error message
+        /// </summary>
+        public string PrintResult(MoveResult result, Players whoseTurn, GameBoard gameBoard)
+        {
+            switch (result)
+            {
+                case MoveResult.GameOver:
+                    Print(gameBoard);
+                    return output.Send($"{gameBoard.Winner.ToString()} WINS !");
+                case MoveResult.Invalid:
+                    return output.Send(boardRejectMsg);
+                case MoveResult.Valid:
+                    return Print(gameBoard);
+                default:
+                    //crash: logical error
+                    throw new ArgumentOutOfRangeException($"Enum value {result} not supported");
+            }
         }
 
         /// <summary>
@@ -83,91 +115,19 @@ namespace ConnectFour
         /// </summary>
         private int[] Prompt(string promptMsg)
         {
-            Console.WriteLine(promptMsg);
-            Console.Write("> ");
-            string rawInput = CheckForExit();
-            string[] tokens = rawInput.Split(' ');
-            List<int> usrIn = new List<int>(tokens.Length);
+            output.Send(promptMsg);
+            output.Send("> ", true);
+            string inputRes = input.Get().ToLower().Trim();
 
-            foreach (var param in tokens)
+            if (rules.CheckForExit(inputRes));
             {
-                int temp;
-                bool success = int.TryParse(param, out temp);
-                if (!success)
-                    throw new UserInputException();
-                usrIn.Add(temp);
-            }
-            return usrIn.ToArray();
-        }
-
-        /// <summary>
-        /// Reads the console input and checks it against an exit condition
-        /// </summary>
-        private string CheckForExit()
-        {
-            string usrIn = Console.ReadLine().ToLower().Trim();
-            if (usrIn == "exit" || usrIn == "quit")
-            {
-                Console.WriteLine(goodbyeMsg);
+                output.Send(goodbyeMsg);
                 Environment.Exit(0);
             }
-            return usrIn;
-        }
+            string[] tokens = inputRes.Split(' ');
+            int[] usrIn = rules.ParseTokens(tokens);
 
-        /// <summary>
-        /// Validates that the user input is two positive numbers
-        /// </summary>
-        private bool ValidateDimensions(int[] usrIn)
-        {
-            if (usrIn.Length == 2)
-            {
-                /* I could use LINQ here, the query would be:
-                 * 
-                 * if (usrIn.All(dim => dim >= 1) && 
-                       usrIn.Any(dim => dim >= 4) && 
-                       usrIn.Aggregate((acc, dim) => dim * acc) >= 8) 
-                 * 
-                 * but I felt it was redundant to iterate the int[] for 2 dimensions
-                 */
-                if ((usrIn[0] >= 1 && usrIn[1] >= 1) && // all dimensions must be positive
-                    (usrIn[0] >= 4 || usrIn[1] >= 4) && // at least one direction must be >= 4 for a win to be possible
-                    (usrIn[0] * usrIn[1] >= 8)) // the minimum number of spaces must be 8 for a win to be possible
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Displays the current state of the game board to the user
-        /// </summary>
-        public void Print(GameBoard gameBoard)
-        {
-            Console.Write(gameBoard);
-        }
-
-        /// <summary>
-        /// Displays the result of the player's turn, either printing the board or an error message
-        /// </summary>
-        public void PrintResult(MoveResult result, Players whoseTurn, GameBoard gameBoard)
-        {
-            switch (result)
-            {
-                case MoveResult.GameOver:
-                    Print(gameBoard);
-                    Console.WriteLine($"{gameBoard.Winner.ToString()} WINS !");
-                    break;
-                case MoveResult.Invalid:
-                    Console.WriteLine(boardRejectMsg);
-                    break;
-                case MoveResult.Valid:
-                    Print(gameBoard);
-                    break;
-                default:
-                    //crash: logical error
-                    throw new ArgumentOutOfRangeException($"Enum value {result} not supported");
-            }
+            return usrIn.ToArray();
         }
     }
 }

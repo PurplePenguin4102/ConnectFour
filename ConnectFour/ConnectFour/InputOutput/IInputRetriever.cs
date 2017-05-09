@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConnectFour.Exceptions
+namespace ConnectFour.InputOutput
 {
-    public class UserInputException : Exception
+    public interface IInputRetriever
     {
+        string Get();
     }
 }

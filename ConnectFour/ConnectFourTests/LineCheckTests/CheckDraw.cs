@@ -104,5 +104,29 @@ namespace ConnectFourTests.LineCheckTests
 
             Assert.IsTrue(line.CheckDraw());
         }
+
+        [TestMethod]
+        public void OneMoveLeft()
+        {
+            var line = new LineCheck()
+            {
+                Rows = 5,
+                Cols = 5,
+                Token = "x"
+            };
+
+            var data = new List<List<string>>
+            {
+                new List<string> { "y", "r", "y", "r", "y" },
+                new List<string> { "r", "y", "r", "y", "r" },
+                new List<string> { "y", "r", "y", "r", "o" },
+                new List<string> { "r", "y", "r", "y", "r" },
+                new List<string> { "y", "r", "y", "r", "y" }
+            };
+
+            line.Columns = data;
+
+            Assert.IsFalse(line.CheckDraw());
+        }
     }
 }

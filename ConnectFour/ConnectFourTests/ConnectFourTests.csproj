@@ -51,11 +51,17 @@
     <Compile Include="LineCheckTests\CheckDraw.cs" />
     <Compile Include="LineCheckTests\PickDiag1.cs" />
     <Compile Include="LineCheckTests\PickDiag2.cs" />
+    <Compile Include="LineCheckTests\PickDirectionMaxLength.cs" />
     <Compile Include="LineCheckTests\PickHoriz.cs" />
     <Compile Include="LineCheckTests\PickVert.cs" />
     <Compile Include="GameBoardTests\Ctor.cs" />
     <Compile Include="LineCheckTests\HasFourInARow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidatorTests\CheckForExit.cs" />
+    <Compile Include="ValidatorTests\ParseTokens.cs" />
+    <Compile Include="ValidatorTests\ValidateDimensions.cs" />
+    <Compile Include="ValidatorTests\ValidateMove.cs" />
+    <Compile Include="ValidatorTests\ValidateMoveAgainstBoard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,11 +9,11 @@ namespace ConnectFour
 {
     public class GameBoard
     {
-        private LineCheck line = new LineCheck();
         private List<List<string>> columns = null;
         private int rows = 0;
         private int cols = 0;
         public Players? Winner { get; private set; } = null;
+        private Validator rules = new Validator();
 
         /// <summary>
         /// creates an empty gameboard of the specified dimensions
@@ -44,17 +44,12 @@ namespace ConnectFour
         /// </summary>
         public MoveResult TryModifyBoard(int move, Players whoseTurn)
         {
-            int col = move - 1;
-            #region ValidityCheck
-            if (move > cols)
+            if (!rules.ValidateMoveAgainstBoard(move, columns))
                 return MoveResult.Invalid;
-            List<string> columnToModify = columns[col];
-            if (!columnToModify.Any((ele) => ele == "o"))
-                return MoveResult.Invalid;
-            #endregion
 
+            int col = move - 1;
             string token = whoseTurn == Players.Yellow ? "y" : "r";
-            int ind = columnToModify.IndexOf("o");
+            int ind = columns[col].IndexOf("o");
             columns[col][ind] = token;
 
             // set the winner
@@ -72,12 +67,15 @@ namespace ConnectFour
         private bool DetectGameEnd(int col, int row)
         {
             // set up line for use this iteration
-            line.Rows = rows;
-            line.Cols = cols;
-            line.Columns = columns;
-            line.Token = columns[col][row];
+            var line = new LineCheck()
+            {
+                Rows = rows,
+                Cols = cols,
+                Columns = columns,
+                Token = columns[col][row]
+            };
 
-            // grab all directions
+            // grab all directions around token
             var possibleWinDirections = new List<List<string>>
             {
                 line.PickVert(col, row),
