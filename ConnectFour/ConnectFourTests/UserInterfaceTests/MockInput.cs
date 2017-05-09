@@ -9,12 +9,10 @@ namespace ConnectFourTests.UserInterfaceTests
 {
     public class MockInput : IInputRetriever
     {
-        public List<string> WhatUserSaid { get; set; }
-        private int index = -1;
+        public string WhatUserSaid { get; set; }
         public string Get()
         {
-            index++;
-            return WhatUserSaid[index];
+            return WhatUserSaid;
         }
     }
 }

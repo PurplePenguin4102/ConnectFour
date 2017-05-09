@@ -53,7 +53,7 @@ namespace ConnectFourTests.TextParserTests
         }
 
         [TestMethod]
-        public void TokensContainwhitespace()
+        public void TokensContainWhitespace()
         {
             string[] tokens = new string[] { "1  ", "  2", "\t3" };
             int[] output = new int[] { 1, 2, 3 };

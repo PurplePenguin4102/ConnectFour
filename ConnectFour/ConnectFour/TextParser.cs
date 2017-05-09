@@ -27,7 +27,7 @@ namespace ConnectFour
         }
 
         /// <summary>
-        /// Parses the tokens into integers, may throw a UserInputException
+        /// Parses the tokens into integers, will throw a UserInputException if token is not recognised as an integer
         /// </summary>
         public int[] ParseTokens(string[] tokens)
         {
@@ -44,6 +44,9 @@ namespace ConnectFour
             return usrIn.ToArray();
         }
 
+        /// <summary>
+        /// removes surrounding whitespace and decapitalises
+        /// </summary>
         public string Clean(string v)
         {
             return v.ToLower().Trim();

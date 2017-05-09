@@ -9,8 +9,6 @@ namespace ConnectFour
 {
     public class Validator
     {
-        
-
         /// <summary>
         /// Reads the console input and checks it against an exit condition
         /// </summary>
