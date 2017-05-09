@@ -8,6 +8,6 @@ namespace ConnectFour.InputOutput
 {
     public interface IOutputSender
     {
-        string Send(string msg);
+        string Send(string msg, bool newline);
     }
 }

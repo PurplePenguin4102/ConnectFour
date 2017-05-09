@@ -58,8 +58,14 @@
     <Compile Include="GameBoardTests\Ctor.cs" />
     <Compile Include="LineCheckTests\HasFourInARow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextParserTests\Clean.cs" />
+    <Compile Include="TextParserTests\GetTokens.cs" />
+    <Compile Include="UserInterfaceTests\MockInput.cs" />
+    <Compile Include="UserInterfaceTests\MockOutput.cs" />
+    <Compile Include="UserInterfaceTests\Print.cs" />
+    <Compile Include="UserInterfaceTests\PrintResult.cs" />
     <Compile Include="ValidatorTests\CheckForExit.cs" />
-    <Compile Include="ValidatorTests\ParseTokens.cs" />
+    <Compile Include="TextParserTests\ParseTokens.cs" />
     <Compile Include="ValidatorTests\ValidateDimensions.cs" />
     <Compile Include="ValidatorTests\ValidateMove.cs" />
     <Compile Include="ValidatorTests\ValidateMoveAgainstBoard.cs" />

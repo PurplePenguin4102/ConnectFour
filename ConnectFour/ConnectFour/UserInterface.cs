@@ -9,15 +9,15 @@ using ConnectFour.InputOutput;
 
 namespace ConnectFour
 {
-    class UserInterface
+    public class UserInterface
     {
         private string dimensionErrorMsg = "> Invalid input, please enter two positive numbers (num1 num2)";
         private string dimensionPromptMsg = "> Please enter the board dimensions (number of rows, number of columns) - minimum dimensions are 2x4";
         private string moveErrorMsg = $"> Please enter a single positive number within the board dimensions";
         private string goodbyeMsg = "See you next time!";
         private string boardRejectMsg = "> Please enter a single positive number within the board dimensions";
-        private Input input = new Input();
-        private Output output = new Output();
+        public IInputRetriever Input { private get; set; } = new Input();
+        public IOutputSender Output { private get; set; } = new Output();
         private Validator rules = new Validator();
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ConnectFour
                 }
                 catch (UserInputException)
                 {
-                    output.Send(dimensionErrorMsg);
+                    Output.Send(dimensionErrorMsg, true);
                 }
             }
             return dimensions;
@@ -57,7 +57,7 @@ namespace ConnectFour
         /// </summary>
         public int GetMove(Players whoseTurn)
         {
-            string promptMsg = $"> {whoseTurn.ToString()}s turn";
+            string promptMsg = $"> {whoseTurn.ToString()}s turn:";
             int move = 0;
             while (move == 0)
             {
@@ -75,7 +75,7 @@ namespace ConnectFour
                 }
                 catch (UserInputException)
                 {
-                    output.Send(moveErrorMsg);
+                    Output.Send(moveErrorMsg, true);
                 }
             }
             return move;
@@ -86,7 +86,7 @@ namespace ConnectFour
         /// </summary>
         public string Print(GameBoard gameBoard)
         {
-            return output.Send(gameBoard.ToString(), true);
+            return Output.Send(gameBoard.ToString(), false);
         }
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace ConnectFour
             {
                 case MoveResult.GameOver:
                     Print(gameBoard);
-                    return output.Send($"{gameBoard.Winner.ToString()} WINS !");
+                    return Output.Send($"> {gameBoard.Winner.ToString()} WINS !", true);
                 case MoveResult.Invalid:
-                    return output.Send(boardRejectMsg);
+                    return Output.Send(boardRejectMsg, true);
                 case MoveResult.Valid:
                     return Print(gameBoard);
                 default:
@@ -115,19 +115,20 @@ namespace ConnectFour
         /// </summary>
         private int[] Prompt(string promptMsg)
         {
-            output.Send(promptMsg);
-            output.Send("> ", true);
-            string inputRes = input.Get().ToLower().Trim();
+            Output.Send(promptMsg, true);
+            Output.Send("> ", false);
+            var textParser = new TextParser();
 
-            if (rules.CheckForExit(inputRes));
+            string input = textParser.Clean(Input.Get());
+
+            if (rules.CheckForExit(input))
             {
-                output.Send(goodbyeMsg);
+                Output.Send(goodbyeMsg, true);
                 Environment.Exit(0);
             }
-            string[] tokens = inputRes.Split(' ');
-            int[] usrIn = rules.ParseTokens(tokens);
 
-            return usrIn.ToArray();
+            string[] tokens = textParser.GetTokens(input); 
+            return textParser.ParseTokens(tokens);
         }
     }
 }

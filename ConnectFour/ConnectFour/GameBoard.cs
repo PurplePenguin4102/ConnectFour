@@ -12,7 +12,7 @@ namespace ConnectFour
         private List<List<string>> columns = null;
         private int rows = 0;
         private int cols = 0;
-        public Players? Winner { get; private set; } = null;
+        public Players? Winner { get; set; } = null;
         private Validator rules = new Validator();
 
         /// <summary>

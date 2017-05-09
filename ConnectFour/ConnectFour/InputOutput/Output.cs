@@ -11,24 +11,15 @@ namespace ConnectFour.InputOutput
         /// <summary>
         /// Returns what is sent, adds a new line to msg
         /// </summary>
-        public string Send(string msg)
+        public string Send(string msg, bool newline)
         {
-            Console.WriteLine(msg);
-            return msg;
-        }
-
-        /// <summary>
-        /// Returns what is sent, doesn't add new line at user request
-        /// </summary>
-        public string Send(string msg, bool noLineEnd)
-        {
-            if (noLineEnd)
+            if (newline)
             {
-                Console.Write(msg);
+                Console.WriteLine(msg);
             }
             else
             {
-                return Send(msg);
+                Console.Write(msg);
             }
             return msg;
         }

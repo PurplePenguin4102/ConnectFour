@@ -9,23 +9,7 @@ namespace ConnectFour
 {
     public class Validator
     {
-        /// <summary>
-        /// Parses the tokens into integers, may throw a UserInputException
-        /// </summary>
-        public int[] ParseTokens(string[] tokens)
-        {
-            List<int> usrIn = new List<int>(tokens.Length);
-
-            foreach (var param in tokens)
-            {
-                int temp;
-                bool success = int.TryParse(param, out temp);
-                if (!success)
-                    throw new UserInputException();
-                usrIn.Add(temp);
-            }
-            return usrIn.ToArray();
-        }
+        
 
         /// <summary>
         /// Reads the console input and checks it against an exit condition

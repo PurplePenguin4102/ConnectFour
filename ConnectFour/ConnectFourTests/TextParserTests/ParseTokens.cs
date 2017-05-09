@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using ConnectFour.Exceptions;
 
-namespace ConnectFourTests.ValidatorTests
+namespace ConnectFourTests.TextParserTests
 {
     [TestClass]
     public class ParseTokens
@@ -14,7 +14,7 @@ namespace ConnectFourTests.ValidatorTests
         {
             string[] tokens = new string[] { "1", "2", "3" };
             int[] output = new int[] { 1, 2, 3};
-            var rules = new Validator();
+            var rules = new TextParser();
             Assert.IsTrue(rules.ParseTokens(tokens).SequenceEqual(output));
         }
 
@@ -22,7 +22,7 @@ namespace ConnectFourTests.ValidatorTests
         public void TokensAreNotIntegers()
         {
             string[] tokens = new string[] { "qasd", "2", "3" };
-            var rules = new Validator();
+            var rules = new TextParser();
             Assert.ThrowsException<UserInputException>(() => rules.ParseTokens(tokens));
         }
 
@@ -31,7 +31,7 @@ namespace ConnectFourTests.ValidatorTests
         {
             string[] tokens = new string[] { "-1", "2", "3" };
             int[] output = new int[] { -1, 2, 3 };
-            var rules = new Validator();
+            var rules = new TextParser();
             Assert.IsTrue(rules.ParseTokens(tokens).SequenceEqual(output));
         }
 
@@ -39,7 +39,7 @@ namespace ConnectFourTests.ValidatorTests
         public void TokensAreFloats()
         {
             string[] tokens = new string[] { "1", "2.2", "3" };
-            var rules = new Validator();
+            var rules = new TextParser();
             Assert.ThrowsException<UserInputException>(() => rules.ParseTokens(tokens));
         }
 
@@ -48,7 +48,7 @@ namespace ConnectFourTests.ValidatorTests
         {
             string[] tokens = new string[] { "0", "2", "3" };
             int[] output = new int[] { 0, 2, 3 };
-            var rules = new Validator();
+            var rules = new TextParser();
             Assert.IsTrue(rules.ParseTokens(tokens).SequenceEqual(output));
         }
 
@@ -57,7 +57,7 @@ namespace ConnectFourTests.ValidatorTests
         {
             string[] tokens = new string[] { "1  ", "  2", "\t3" };
             int[] output = new int[] { 1, 2, 3 };
-            var rules = new Validator();
+            var rules = new TextParser();
             Assert.IsTrue(rules.ParseTokens(tokens).SequenceEqual(output));
         }
     }
