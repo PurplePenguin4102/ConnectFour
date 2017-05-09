@@ -20,6 +20,6 @@ The dimensions of the game board are up to you! There are only 3 rules
 3. There's no such thing as negative or zero dimensions. Positive numbers only!
 
 ## Features
-- Yo leave the game, type "exit" or "quit" whenever you want
+- To leave the game, type "exit" or "quit" whenever you want
 - Supports two players. 
 - Supports one game per run only.
