@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameBoardTests\TryModifyBoard.cs" />
     <Compile Include="LineCheckTests\CheckDraw.cs" />
     <Compile Include="LineCheckTests\PickDiag1.cs" />
     <Compile Include="LineCheckTests\PickDiag2.cs" />

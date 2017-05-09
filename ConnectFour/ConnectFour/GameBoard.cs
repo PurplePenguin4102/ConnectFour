@@ -53,18 +53,14 @@ namespace ConnectFour
             columns[col][ind] = token;
 
             // set the winner
-            MoveResult retVal = DetectGameEnd(col, ind) ? MoveResult.GameOver : MoveResult.Valid;
-            if (retVal == MoveResult.GameOver && Winner != Players.Nobody)
-                Winner = whoseTurn;
-
-            return retVal;
+            return DetectGameEnd(col, ind, whoseTurn) ? MoveResult.GameOver : MoveResult.Valid;
         }
 
         /// <summary>
         /// Detects the victory condition of connect 4, if there are 4 in a row horizontally, 
         /// vertically or along a diagonal. Game is also over if no more moves can be made
         /// </summary>
-        private bool DetectGameEnd(int col, int row)
+        private bool DetectGameEnd(int col, int row, Players whoseTurn)
         {
             // set up line for use this iteration
             var line = new LineCheck()
@@ -87,6 +83,7 @@ namespace ConnectFour
             // test victory condition
             if (possibleWinDirections.Any(tokens => line.HasFourInARow(tokens)))
             {
+                Winner = whoseTurn;
                 return true;
             }
 
