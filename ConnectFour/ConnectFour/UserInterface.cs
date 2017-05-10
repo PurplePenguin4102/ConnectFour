@@ -12,7 +12,7 @@ namespace ConnectFour
     public class UserInterface
     {
         private string dimensionErrorMsg = "> Invalid input, please enter two positive numbers (num1 num2) - minimum dimensions are 2x4";
-        private string dimensionPromptMsg = "> Please enter the board dimensions (number of rows, number of columns);
+        private string dimensionPromptMsg = "> Please enter the board dimensions (number of rows, number of columns)";
         private string moveErrorMsg = $"> Please enter a single positive number within the board dimensions";
         private string goodbyeMsg = "See you next time!";
         private string boardRejectMsg = "> Please enter a single positive number within the board dimensions";
